@@ -12,4 +12,8 @@ public class Tree<K,V> {
 
         this.rootNode = rootNode;
     }
+
+    public TreeNode<K,V> getRoot() {
+        return rootNode;
+    }
 }

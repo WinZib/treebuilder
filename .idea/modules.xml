@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/annotation-treebuilder/annotation-treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder-samples/annotation-treebuilder/annotation-treebuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/text-treebuilder/text-treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder-samples/text-treebuilder/text-treebuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treebuilder/treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder/treebuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treebuilder-main.iml" filepath="$PROJECT_DIR$/treebuilder-main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/treebuilder-samples.iml" filepath="$PROJECT_DIR$/treebuilder-samples/treebuilder-samples.iml" />
+    </modules>
+  </component>
+</project>

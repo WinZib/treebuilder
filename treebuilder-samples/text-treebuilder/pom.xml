@@ -3,13 +3,14 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>treebuilder-main</artifactId>
+        <artifactId>treebuilder-samples</artifactId>
         <groupId>org.egzi.treebuilder</groupId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>treebuilder</artifactId>
+    <groupId>org.egzi.treebuilder.samples</groupId>
+    <artifactId>text-treebuilder</artifactId>
 
     <dependencies>
         <dependency>
@@ -25,5 +26,4 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
-
 </project>

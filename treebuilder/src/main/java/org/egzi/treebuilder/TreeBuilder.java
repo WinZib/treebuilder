@@ -35,7 +35,7 @@ public class TreeBuilder<K, V> {
 
         forest.clearRegister();
 
-        if (failIfUnmappedElementsFound)
+        if (failIfUnmappedElementsFound && forest.getUnfoundNodeID().size() > 0)
             throw new TreeConstructException("Didn't find " + forest.getUnfoundNodeID() + " elements. Tree can't be constructed");
 
         return forest;

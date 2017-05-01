@@ -1,8 +1,6 @@
 package org.egzi.treebuilder;
 
-/**
- * Created by Егор on 14.09.2016.
- */
+
 public class Tree<K,V> {
     private TreeNode<K, V> rootNode;
 

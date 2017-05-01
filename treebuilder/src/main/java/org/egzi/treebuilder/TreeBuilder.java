@@ -1,7 +1,9 @@
 package org.egzi.treebuilder;
 
 /**
- * Created by Егор on 14.09.2016.
+ * Sample tree builder
+ * @param <K> type for node ID
+ * @param <V> type for node values
  */
 public class TreeBuilder<K, V> {
 
@@ -14,18 +16,32 @@ public class TreeBuilder<K, V> {
     }
 
 
-
+    /**
+     * Set TableLocator to discover new nodes
+     * @param treeNodeLocator source locator
+     * @return current treebuilder
+     */
     public TreeBuilder<K, V> useTreeNodeLocator(TreeNodeLocator<K, V> treeNodeLocator) {
         this.treeNodeLocator = treeNodeLocator;
         return this;
     }
 
+    /**
+     * Set <b>true</b> and treebuilder will raise an {@see TreeConstructException} exception if after tree construction
+     * unadded node will be find
+     * @param failIfUnmappedElementsFound
+     * @return
+     */
     public TreeBuilder<K, V> setFailIfUnmappedElementsFound(boolean failIfUnmappedElementsFound) {
         this.failIfUnmappedElementsFound = failIfUnmappedElementsFound;
         return this;
     }
 
-    public Forest buildTrees() {
+    /**
+     * Build tree with passed parameters
+     * @return {@see Forest} entity
+     */
+    public Forest<K, V> buildTrees() {
         Forest<K, V> forest = new Forest<K, V>();
 
         while (treeNodeLocator.hasMore()) {

@@ -41,7 +41,7 @@ public class TextTreeTests {
             try {
                 executorService.awaitTermination(10L, TimeUnit.SECONDS);
             } catch (InterruptedException e) {
-
+                e.printStackTrace();
             }
             executorService.shutdownNow();
         }

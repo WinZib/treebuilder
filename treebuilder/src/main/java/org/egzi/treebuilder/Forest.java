@@ -3,7 +3,9 @@ package org.egzi.treebuilder;
 import java.util.*;
 
 /**
- * Created by Егор on 14.09.2016.
+ * Container for trees
+ * @param <K> key type
+ * @param <V> value type
  */
 public class Forest<K, V> {
     private Map<K, TreeNode<K,V>> treeRegister = new HashMap<K, TreeNode<K, V>>();
@@ -15,6 +17,14 @@ public class Forest<K, V> {
     Forest() {
     }
 
+    /**
+     * Add node to the forest entity.
+     * Node with <b>null</b> as a parent node will be treated as a root node for the new tree
+     * If there's no node with <b>parentID</b> key in forest than current one will be add to pending list
+     * Otherwise if node with ID equals parentId from treeNode than current node will be added to this tree and pending
+     * nodes with parentId equal to getId of current node will be added too
+     * @param treeNode new node
+     */
     public void addTreeNode(TreeNode<K, V> treeNode) {
         if (treeNode.getId() == null)
             throw new IllegalArgumentException("id of tree's element can't be null");
@@ -29,7 +39,7 @@ public class Forest<K, V> {
             TreeNode<K, V> parentNode = treeRegister.get(treeNode.getParentId());
 
             if (parentNode == null) {
-                addPedningParent(treeNode);
+                addPendingParent(treeNode);
             } else {
                 parentNode.addChildNode(treeNode);
             }
@@ -40,7 +50,11 @@ public class Forest<K, V> {
         refreshPending(treeNode);
     }
 
-    private void addPedningParent(TreeNode<K, V> treeNode) {
+    /**
+     * Add node to pending nodes list
+     * @param treeNode pending node
+     */
+    private void addPendingParent(TreeNode<K, V> treeNode) {
         Set<TreeNode<K, V>> pendings = pendingNodes.get(treeNode.getParentId());
 
         if (pendings == null) {
@@ -51,14 +65,26 @@ public class Forest<K, V> {
         pendings.add(treeNode);
     }
 
+    /**
+     * Get all available trees
+     * @return available trees
+     */
     public Collection<Tree<K, V>> getTrees() {
         return trees.values();
     }
 
+    /**
+     * Add tree to forest
+     * @param rootNode new tree
+     */
     private void addTree(final TreeNode<K ,V> rootNode) {
         trees.put(rootNode.getId(), new Tree<K, V>(rootNode));
     }
 
+    /**
+     * Refresh nodes after adding newNode
+     * @param newNode new Node
+     */
     private void refreshPending(TreeNode<K, V> newNode) {
         Set<TreeNode<K, V>> pended = pendingNodes.get(newNode.getId());
 
@@ -73,6 +99,10 @@ public class Forest<K, V> {
         pendingNodes.remove(newNode.getId());
     }
 
+    /**
+     * Get set of unadded nodes
+     * @return set of nodes
+     */
     public Set<K> getUnfoundNodeID() {
         return pendingNodes.keySet();
     }

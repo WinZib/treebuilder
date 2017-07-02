@@ -1,7 +1,14 @@
 package org.egzi.springconfigurator.model;
 
-/**
- * Created by egorz on 6/6/2017.
- */
+import javax.xml.bind.annotation.XmlRegistry;
+
+@XmlRegistry
 public class ObjectFactory {
+    public ContextInfoHolder createContextInfoHolder() {
+        return new ContextInfoHolder();
+    }
+
+    public ContextInfo createContextInfo() {
+        return new ContextInfo();
+    }
 }

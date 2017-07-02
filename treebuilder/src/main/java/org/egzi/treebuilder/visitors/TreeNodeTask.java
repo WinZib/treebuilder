@@ -5,7 +5,9 @@ import org.egzi.treebuilder.TreeNode;
 import java.util.concurrent.Callable;
 
 /**
- * Created by Егор on 28.09.2016.
+ *
+ * @param <K>
+ * @param <V>
  */
 public class TreeNodeTask<K,V> implements Callable {
     private TreeNode<K,V> treeNode;

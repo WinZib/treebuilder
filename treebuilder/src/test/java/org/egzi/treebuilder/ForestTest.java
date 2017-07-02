@@ -30,7 +30,7 @@ public class ForestTest {
             return id;
         }
 
-        public Integer getObject() {
+        public Integer get() {
             return id;
         }
     }

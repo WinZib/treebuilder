@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/annotation-treebuilder/annotation-treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder-samples/annotation-treebuilder/annotation-treebuilder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/spring-configurator/spring-configurator.iml" filepath="$PROJECT_DIR$/treebuilder-samples/spring-configurator/spring-configurator.iml" />
       <module fileurl="file://$PROJECT_DIR$/treebuilder-samples/text-treebuilder/text-treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder-samples/text-treebuilder/text-treebuilder.iml" />
       <module fileurl="file://$PROJECT_DIR$/treebuilder/treebuilder.iml" filepath="$PROJECT_DIR$/treebuilder/treebuilder.iml" />
       <module fileurl="file://$PROJECT_DIR$/treebuilder-main.iml" filepath="$PROJECT_DIR$/treebuilder-main.iml" />

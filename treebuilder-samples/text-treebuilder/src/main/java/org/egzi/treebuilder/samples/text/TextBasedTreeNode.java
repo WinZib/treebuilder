@@ -39,7 +39,7 @@ public class TextBasedTreeNode extends AbstractTreeNode<Integer, String> {
     }
 
     @Override
-    public String getObject() {
+    public String get() {
         return data;
     }
 }

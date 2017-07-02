@@ -10,9 +10,21 @@ import java.util.Collection;
 public interface TreeNode<K, V> {
     /**
      * Return Parent Node key
-     * @return <b>K</b>
+     * @return <b>K</b> or null if it's the root
      */
     K getParentId();
+
+    /**
+     * Return Parent Node
+     * @return <b>parent</b> node instance or null if it's the root
+     */
+    TreeNode<K,V> getParent();
+
+    /**
+     * set parent node for specified
+     * @param parent new parent node
+     */
+    void setParent(TreeNode<K, V> parent);
 
     /**
      * Return entity key
@@ -24,7 +36,7 @@ public interface TreeNode<K, V> {
      * Return entity value
      * @return <b>V</b>
      */
-    V getObject();
+    V get();
 
     /**
      * Return children nodes

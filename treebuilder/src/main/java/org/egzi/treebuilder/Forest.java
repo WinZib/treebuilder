@@ -41,7 +41,7 @@ public class Forest<K, V> {
             if (parentNode == null) {
                 addPendingParent(treeNode);
             } else {
-                parentNode.addChildNode(treeNode);
+                connectNodes(parentNode, treeNode);
             }
         }
 
@@ -93,10 +93,21 @@ public class Forest<K, V> {
             return;
         }
 
-        for (TreeNode<K, V> node : pended)
-            newNode.addChildNode(node);
+        for (TreeNode<K, V> node : pended) {
+            connectNodes(newNode, node);
+        }
 
         pendingNodes.remove(newNode.getId());
+    }
+
+    /**
+     * Link two nodes by Parent-Child relation
+     * @param parent
+     * @param child
+     */
+    private void connectNodes(TreeNode<K, V> parent, TreeNode<K, V> child) {
+        parent.addChildNode(child);
+        child.setParent(parent);
     }
 
     /**

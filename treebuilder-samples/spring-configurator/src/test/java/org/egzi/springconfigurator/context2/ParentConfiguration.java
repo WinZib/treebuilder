@@ -1,7 +1,7 @@
 package org.egzi.springconfigurator.context2;
 
-/**
- * Created by egorz on 6/6/2017.
- */
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
 public class ParentConfiguration {
 }

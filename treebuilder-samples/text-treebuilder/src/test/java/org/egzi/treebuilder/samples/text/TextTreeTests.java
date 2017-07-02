@@ -29,7 +29,7 @@ public class TextTreeTests {
         walker.setVisitor(new Visitor<Integer, String>() {
             @Override
             public <R> R doVisit(TreeNode<Integer, String> node) {
-                result.append(node.getObject());
+                result.append(node.get());
                 return null;
             }
         });

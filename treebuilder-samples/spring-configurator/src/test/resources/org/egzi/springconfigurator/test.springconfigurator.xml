@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<context-configurations xmlns="https://github.com/WinZib/treebuilder/schema.xsd">
+    <context-configuration lazy-init="true" application-context-class="org.springframework.context.annotation.AnnotationConfigApplicationContext">
+        <context-class>org.egzi.springconfigurator.context1.MyConfiguration</context-class>
+        <parent-context-class>org.egzi.springconfigurator.context2.ParentConfiguration</parent-context-class>
+    </context-configuration>
+</context-configurations>

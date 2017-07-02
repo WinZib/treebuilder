@@ -9,13 +9,8 @@ import org.egzi.treebuilder.TreeNode;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ForkJoinPool;
 
-/**
- * Created by Егор on 27.09.2016.
- */
-public class AsyncWalker<K,V>  {
+public class AsyncWalker<K,V> extends AbstractWalker<K,V> {
     private ListeningExecutorService executorService;
-
-    private Visitor<K,V> visitor;
 
     private OnErrorListener onErrorListener;
 
@@ -33,10 +28,6 @@ public class AsyncWalker<K,V>  {
 
     public void setForkJoinPool(final ForkJoinPool forkJoinPool) {
         setExecutorService(forkJoinPool);
-    }
-
-    public void setVisitor(final Visitor<K,V> visitor) {
-        this.visitor = visitor;
     }
 
     public void setOnErrorListener(OnErrorListener onErrorListener) {
@@ -59,7 +50,7 @@ public class AsyncWalker<K,V>  {
     }
 
     private TreeNodeTask<K,V> constructVisitTask(TreeNode<K,V> treeNode) {
-        return new TreeNodeTask<K, V>(treeNode, visitor);
+        return new TreeNodeTask<K, V>(treeNode, getVisitor());
     }
 
 

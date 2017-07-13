@@ -6,6 +6,7 @@ import org.egzi.treebuilder.visitors.AsyncWalker;
 import org.springframework.context.ApplicationContext;
 
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.TimeUnit;
 
 public class ContextManager {
     private static final String CONTEXT_PARALLELISM = "spring.configurator.parallelism";
@@ -39,6 +40,8 @@ public class ContextManager {
         AsyncWalker<Class, ApplicationContext> asyncWalker = new AsyncWalker<>();
         asyncWalker.setForkJoinPool(fjp);
         asyncWalker.setVisitor(new ContextVisitor(this));
+        asyncWalker.walk(forest);
+        asyncWalker.await(100, TimeUnit.SECONDS);
     }
 
     public Forest<Class, ApplicationContext> getForest() {

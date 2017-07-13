@@ -39,6 +39,12 @@ public interface TreeNode<K, V> {
     V get();
 
     /**
+     * Set entity value
+     * @param value new entity value
+     */
+    void set(V value);
+
+    /**
      * Return children nodes
      * @return children
      */

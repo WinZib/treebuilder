@@ -1,69 +1,122 @@
 package org.egzi.springconfigurator;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 import org.egzi.treebuilder.AbstractTreeNode;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.util.Date;
 
-@ToString
-@Builder()
 public class ContextTreeNode extends AbstractTreeNode<Class, ApplicationContext> {
-    @Getter
-    @Setter
-    private ApplicationContext context;
-    @Getter
-    @Setter
     private Date scheduleDate;
-    @Getter
-    @Setter
+
     private Date startDate;
-    @Getter
-    @Setter
+
     private Date finishDate;
-    @Getter
-    @Setter
+
     private Date stopDate;
-    @Getter
-    @Setter
+
     private Throwable error;
 
-    @Getter
     private Class applicationConfigClass;
-    @Getter
+
     private Class parentApplicationConfigClass;
-    @Getter
+
     private Class<? extends AnnotationConfigApplicationContext> contextClass;
-    @Getter
+
     private boolean lazyInit;
 
-    public ContextTreeNode(ApplicationContext context, Date scheduleDate, Date startDate, Date finishDate, Date stopDate, Throwable error, Class applicationConfigClass, Class parentApplicationConfigClass, Class<? extends AnnotationConfigApplicationContext> contextClass, boolean lazyInit) {
-        this.context = context;
-        this.scheduleDate = scheduleDate;
-        this.startDate = startDate;
-        this.finishDate = finishDate;
-        this.stopDate = stopDate;
-        this.error = error;
+    public ContextTreeNode(Class applicationConfigClass, Class parentApplicationConfigClass, Class<? extends AnnotationConfigApplicationContext> contextClass, boolean lazyInit) {
+        super(applicationConfigClass, parentApplicationConfigClass);
         this.applicationConfigClass = applicationConfigClass;
         this.parentApplicationConfigClass = parentApplicationConfigClass;
         this.contextClass = contextClass;
         this.lazyInit = lazyInit;
     }
 
-    public ApplicationContext get() {
-        return context;
+    public Date getScheduleDate() {
+        return scheduleDate;
     }
 
-    public Class getId() {
+    public void setScheduleDate(Date scheduleDate) {
+        this.scheduleDate = scheduleDate;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getFinishDate() {
+        return finishDate;
+    }
+
+    public void setFinishDate(Date finishDate) {
+        this.finishDate = finishDate;
+    }
+
+    public Date getStopDate() {
+        return stopDate;
+    }
+
+    public void setStopDate(Date stopDate) {
+        this.stopDate = stopDate;
+    }
+
+    public Throwable getError() {
+        return error;
+    }
+
+    public void setError(Throwable error) {
+        this.error = error;
+    }
+
+    public Class getApplicationConfigClass() {
         return applicationConfigClass;
     }
 
-    public Class getParentId() {
+    public void setApplicationConfigClass(Class applicationConfigClass) {
+        this.applicationConfigClass = applicationConfigClass;
+    }
+
+    public Class getParentApplicationConfigClass() {
         return parentApplicationConfigClass;
     }
 
+    public void setParentApplicationConfigClass(Class parentApplicationConfigClass) {
+        this.parentApplicationConfigClass = parentApplicationConfigClass;
+    }
+
+    public Class<? extends AnnotationConfigApplicationContext> getContextClass() {
+        return contextClass;
+    }
+
+    public void setContextClass(Class<? extends AnnotationConfigApplicationContext> contextClass) {
+        this.contextClass = contextClass;
+    }
+
+    public boolean isLazyInit() {
+        return lazyInit;
+    }
+
+    public void setLazyInit(boolean lazyInit) {
+        this.lazyInit = lazyInit;
+    }
+
+    @Override
+    public String toString() {
+        return "ContextTreeNode{" +
+                "scheduleDate=" + scheduleDate +
+                ", startDate=" + startDate +
+                ", finishDate=" + finishDate +
+                ", stopDate=" + stopDate +
+                ", error=" + error +
+                ", applicationConfigClass=" + applicationConfigClass +
+                ", parentApplicationConfigClass=" + parentApplicationConfigClass +
+                ", contextClass=" + contextClass +
+                ", lazyInit=" + lazyInit +
+                '}';
+    }
 }

@@ -2,13 +2,10 @@ package org.egzi.springconfigurator.model;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import javax.xml.bind.annotation.*;
 
-@XmlRootElement(name = "context-configuration")
-public class ContextInfo {
+
+public class ConfigDefinition {
     @XmlElement(name = "config-class")
     private Class configurationClass;
     @XmlElement(name = "parent-config-class")
@@ -18,6 +15,10 @@ public class ContextInfo {
     @XmlAttribute(name = "application-context-class")
     private Class<? extends AnnotationConfigApplicationContext> applicationContextClass = AnnotationConfigApplicationContext.class;
 
+    public ConfigDefinition() {
+    }
+
+    @XmlTransient
     public Class getConfigurationClass() {
         return configurationClass;
     }
@@ -37,4 +38,3 @@ public class ContextInfo {
         return applicationContextClass;
     }
 }
-

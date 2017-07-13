@@ -1,40 +1,16 @@
 package org.egzi.treebuilder;
 
-import junit.framework.TestCase;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.Set;
 
-import static junit.framework.TestCase.*;
+import static junit.framework.TestCase.assertTrue;
 
 /**
  * Created by Егор on 14.09.2016.
  */
 public class ForestTest {
-    private class IntegerTreeNode extends AbstractTreeNode<Integer, Integer> {
-        private Integer id;
-
-        private Integer parentId;
-
-        IntegerTreeNode(Integer parentId, Integer id) {
-            this.id = id;
-            this.parentId = parentId;
-        }
-
-        public Integer getParentId() {
-            return parentId;
-        }
-
-        public Integer getId() {
-            return id;
-        }
-
-        public Integer get() {
-            return id;
-        }
-    }
-
     @Test
     public void testNullID() {
         Forest<Integer, Integer> forest = new Forest<Integer, Integer>();
@@ -45,7 +21,6 @@ public class ForestTest {
         forest.addTreeNode(new IntegerTreeNode(3, 4));
         assertTrue(forest.getUnfoundNodeID().size() == 0);
     }
-
 
     @Test
     public void testUnfoundNodeIDs() {
@@ -70,6 +45,12 @@ public class ForestTest {
         Collection<Tree<Integer, Integer>> trees = forest.getTrees();
         assertTrue(trees.size() == 2);
 
+    }
+
+    private class IntegerTreeNode extends AbstractTreeNode<Integer, Integer> {
+        IntegerTreeNode(Integer parentId, Integer id) {
+            super(id, id, parentId);
+        }
     }
 
 }

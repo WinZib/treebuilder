@@ -13,8 +13,8 @@
 
     <xs:complexType name="context-configuration-type">
         <xs:sequence>
-            <xs:element name="context-class" type="xs:string" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="parent-context-class" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="config-class" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="parent-config-class" type="xs:string" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
         <xs:attribute name="lazy-init" type="xs:boolean" default="true" use="optional"/>
         <xs:attribute name="application-context-class" type="xs:string" use="optional"/>

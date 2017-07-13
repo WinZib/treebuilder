@@ -1,18 +1,16 @@
 package org.egzi.springconfigurator;
 
 import com.google.common.base.Throwables;
-import org.egzi.springconfigurator.model.ContextInfo;
-import org.egzi.springconfigurator.model.ContextInfoHolder;
+import org.egzi.springconfigurator.model.ConfigDefinition;
+import org.egzi.springconfigurator.model.ConfigDefinitionContainer;
 import org.egzi.treebuilder.TreeNode;
 import org.egzi.treebuilder.TreeNodeLocator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.w3c.dom.Node;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.dom.DOMSource;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -33,12 +31,11 @@ public class ContextDefinitionLocator implements TreeNodeLocator<Class, Applicat
         try {
             jaxbContext = JAXBContext.newInstance("org.egzi.springconfigurator.model");
         } catch (JAXBException e) {
-            e.printStackTrace();
             log.error("Error at initialization of JAXBContext", e);
         }
     }
 
-    Iterator<ContextInfo> contextIterator;
+    Iterator<ConfigDefinition> contextIterator;
     Enumeration<URL> resourceEnumeration;
 
     public ContextDefinitionLocator() {
@@ -60,29 +57,16 @@ public class ContextDefinitionLocator implements TreeNodeLocator<Class, Applicat
         return convert(contextIterator.next());
     }
 
-    private ContextTreeNode convert(ContextInfo contextInfo) {
-        return ContextTreeNode.builder()
-                .applicationConfigClass(contextInfo.getApplicationContextClass())
-                .parentApplicationConfigClass(contextInfo.getParentConfigurationClass())
-                .contextClass(contextInfo.getApplicationContextClass())
-                .lazyInit(contextInfo.isLazyInit())
-                .build();
-    }
-
-    private ContextInfo unmarshall(Node node) {
-        try {
-            return jaxbContext.createUnmarshaller().unmarshal(new DOMSource(node), ContextInfo.class).getValue();
-        } catch (JAXBException je) {
-            throw new RuntimeException("fail parse context-definition");
-        }
+    private ContextTreeNode convert(ConfigDefinition configDefinition) {
+        return new ContextTreeNode(configDefinition.getConfigurationClass(), configDefinition.getParentConfigurationClass(), configDefinition.getApplicationContextClass(), configDefinition.isLazyInit());
     }
 
     private void parseResource() {
         URL resource = resourceEnumeration.nextElement();
         try {
-            ContextInfoHolder contextInfoHolder = (ContextInfoHolder)
+            ConfigDefinitionContainer configDefinitionContainer = (ConfigDefinitionContainer)
                     jaxbContext.createUnmarshaller().unmarshal(new FileInputStream(new File(resource.toURI())));
-            contextIterator = contextInfoHolder.getContextInfoList().iterator();
+            contextIterator = configDefinitionContainer.getContextDefinitions().iterator();
         } catch (Exception e) {
             throw new RuntimeException("fail to parse resource " + resource, e);
         }

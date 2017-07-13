@@ -26,44 +26,43 @@ public class ContextVisitor implements Visitor<Class, ApplicationContext> {
 
     @Override
     public <R> R doVisit(TreeNode<Class, ApplicationContext> node) {
-        ContextTreeNode contextInfo = (ContextTreeNode) node;
+        ContextTreeNode contextTreeNode = (ContextTreeNode) node;
 
         try {
 
-            final Class configuration = contextInfo.getId();
+            ApplicationContext context = init(contextTreeNode);
 
-            final AnnotationConfigApplicationContext context = contextInfo.getContextClass().newInstance();
+            contextTreeNode.setStartDate(new Date());
+            contextTreeNode.set(context);
 
-            contextInfo.setStartDate(new Date());
-
-            //final ClassLoader loader = Mode.getMode() == Mode.RTF ? ClassUtils
-            //        .overrideThreadContextClassLoader(ContextFactory.class.getClassLoader()) : null;
-            log.info("start context {}", configuration.getSimpleName());
-            //  context.getEnvironment().setActiveProfiles(Mode.getProfileNames());
-            //  log.info("activate profiles: {}", Arrays.toString(context.getEnvironment().getActiveProfiles()));
-            context.setAllowBeanDefinitionOverriding(true);
-            context.setAllowCircularReferences(true);
-            context.register(configuration);
-            log.trace("bean factory {}", context.getBeanFactory());
-            if (node.getParentId() != null)
-                context.setParent(node.getParent().get());
-            context.registerShutdownHook();
-            context.refresh();
-
-
-            //internal bean that implements MediationInternalListener will be executed at the end automatically
             Map<String, ContextListener> internalListeners = context.getBeansOfType(ContextListener.class);
             log.debug("found listeners to append: {}", internalListeners.keySet());
 
-            log.info("finish context {} : {}", configuration.getSimpleName(), context);
         } catch (Throwable t) {
-            contextInfo.setError(t);
+            contextTreeNode.setError(t);
             Throwables.propagate(t);
         } finally {
-            contextInfo.setFinishDate(new Date());
-            //ClassUtils.overrideThreadContextClassLoader(loader);
+            contextTreeNode.setFinishDate(new Date());
         }
-
         return null;
+    }
+
+    private ApplicationContext init(ContextTreeNode contextTreeNode) throws Exception {
+        final Class configuration = contextTreeNode.getId();
+
+        final AnnotationConfigApplicationContext context = contextTreeNode.getContextClass().newInstance();
+
+        log.info("start context {}", configuration.getSimpleName());
+
+        context.setAllowBeanDefinitionOverriding(true);
+        context.setAllowCircularReferences(true);
+        context.register(configuration);
+        log.trace("bean factory {}", context.getBeanFactory());
+        if (contextTreeNode.getParentId() != null)
+            context.setParent(contextTreeNode.getParent().get());
+        context.registerShutdownHook();
+        context.refresh();
+
+        return context;
     }
 }

@@ -3,7 +3,7 @@
     "lazy-init": false,
     "application-context-class": "org.springframework.context.annotation.AnnotationConfigApplicationContext",
     "config-class": "org.egzi.springconfigurator.context2.ParentConfiguration"
-  }
+  },
   {
     "lazy-init": false,
     "application-context-class": "org.springframework.context.annotation.AnnotationConfigApplicationContext",

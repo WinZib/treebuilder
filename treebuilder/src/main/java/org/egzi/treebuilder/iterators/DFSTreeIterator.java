@@ -8,10 +8,10 @@ import java.util.*;
 /**
  * Created by egorz on 11/29/2017.
  */
-public class DFSIterator<K, V> implements Iterator<TreeNode<K, V>> {
+public class DFSTreeIterator<K, V> implements Iterator<TreeNode<K, V>> {
     private Stack<TreeNode<K, V>> stack = new Stack<>();
 
-    public DFSIterator(Forest<K, V> forest) {
+    public DFSTreeIterator(Forest<K, V> forest) {
         //store roots in stack
         forest.getTrees().forEach((e) -> stack.push(e.getRoot()));
     }

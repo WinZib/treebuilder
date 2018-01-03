@@ -11,10 +11,10 @@ import java.util.Queue;
 /**
  * Created by egorz on 11/29/2017.
  */
-public class BFSIterator<K, V> implements Iterator<TreeNode<K, V>> {
+public class BFSTreeIterator<K, V> implements Iterator<TreeNode<K, V>> {
     private Queue<TreeNode<K, V>> queue = new LinkedList<>();
 
-    public BFSIterator(Forest<K, V> forest) {
+    public BFSTreeIterator(Forest<K, V> forest) {
         //store roots in queue
         forest.getTrees().forEach((e) -> queue.add(e.getRoot()));
     }

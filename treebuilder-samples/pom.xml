@@ -14,13 +14,4 @@
         <module>text-treebuilder</module>
         <module>spring-configurator</module>
     </modules>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.egzi.treebuilder</groupId>
-            <artifactId>treebuilder</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
 </project>

@@ -47,7 +47,7 @@ Yaml is configurated the same way, as properties file, but yaml file lookup shou
                 .configuration()
                 .enableContextFileLookup("META-INF/manager/context.yaml"));
 ```
-**2.Configure the context manager**
+**2. Configure the context manager**
 
 Context Manager is main class for working with spring context hierarchy. It should be configured before working with it. You can't configure context manager after `getInstance` was invoked.
 
@@ -80,7 +80,7 @@ Example:
                 .addProfiels(Arrays.asList("Profile2","Profile3")));
 ```
 
-**2.Start context manager**
+**3. Start context manager**
 You can start context manager in sync or async mode.
 - In sync mode we pass timeout in start method and wait specified timeout. If timeout expired, TimeoutException would be thrown.
 ``` java
@@ -92,7 +92,7 @@ ContextManager.getInstance().start(3,TimeUnit.MINUTES)
         contextsFuture.get(MyConfiguration_1.class).get(1,SECONDS)
 ```
   
-**2.Add context to configured tree on the fly**
+**4. Add context to configured tree on the fly**
 
 You can configure ContextManager by java API after configuration file lookup before and after start.
 - If context manager have't been started,  we just add `not started` context node to `not started` tree. After that we start context manager and our external contexts will be started by FJP.
@@ -120,3 +120,57 @@ ContextManager.getInstance().add(
                 )); // wait ParentContext for infinite timeout(no timeout value was passed), 
                 //start AddedContext, and add it in tree
 ```
+
+**5. Add context listeners to ContextManager**
+You can add listner to specified context and it will be fired on:
+- context starting
+- context refresh
+- context error
+
+You can add listener before start, and all events will be processed
+``` java
+        ContextListener contextListener = new ContextListener() {
+            @Override
+            public void onStart() {
+                System.out.println("start");
+
+            }
+
+            @Override
+            public void onError() {
+                System.out.println("error");
+
+            }
+
+            @Override
+            public void onRefresh() {
+                System.out.println("Refresh");
+            }
+        };
+        ContextManager.getInstance().addListener(StandaloneContext.class, contextListener);
+        ContextManager.getInstance().start();
+```
+You can add listener after start and only `refresh` and `error` events will be processed
+``` java
+        ContextManager.getInstance().start();
+        ContextManager.getInstance().addListener(StandaloneContext.class, contextListener);
+
+```
+**6. Get information of current state of context trees**
+You can get information about trees this way:
+``` java
+ContextTreeInfo infos = ContextManager.getInstance().contextTreeInfo();
+```
+After you got information for all contexts, you could obtain information for specific configuration:
+``` java
+ContextInfo info = infos.contextInfo(MyConfiguration.class)
+```
+We have context info now, so it provides to us information about context start time, stop time, context error, etc.
+
+**7. Obtain starting context from ContextManager**
+
+If you start context, you usually want to get started application context. You can do via ContextManager API:
+``` java
+ApplicationContext context = ContextManager.getInstance().provideApplicationContext(MyConfiguration.class, 1, MINUTES);
+```
+When you invoke provideApplicationContext with timeout, you are begining to wait context start. If timeout is over, exception will be thorwn 

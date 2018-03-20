@@ -1,0 +1,10 @@
+contexts:
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.child.ChildContext
+    parent-config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+

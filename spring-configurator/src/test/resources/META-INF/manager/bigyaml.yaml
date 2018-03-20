@@ -1,0 +1,34 @@
+contexts:
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig1
+    parent-config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig2
+    parent-config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig3
+    parent-config-class: org.egzi.springconfigurator.context.manager.parent.ParentContext
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.superchild.SuperChild1
+    parent-config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig1
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.superchild.SuperChild2
+    parent-config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig2
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.children.superchild.SuperChild3
+    parent-config-class: org.egzi.springconfigurator.context.manager.children.ChildConfig3

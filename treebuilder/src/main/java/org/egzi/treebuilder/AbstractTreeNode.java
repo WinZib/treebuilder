@@ -1,59 +1,54 @@
 package org.egzi.treebuilder;
 
+import lombok.*;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Objects;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.util.Collections.unmodifiableCollection;
 
 /**
  * Created by Егор on 14.09.2016.
  */
+@RequiredArgsConstructor
+@Getter
+@Setter
 public abstract class AbstractTreeNode<K, V> implements TreeNode<K, V> {
 
-    private K id;
+    private final K id;
 
-    private V value;
+    private final K parentId;
 
-    private K parentId;
+    @Getter(value = AccessLevel.NONE)
+    @Setter(value = AccessLevel.NONE)
+    private volatile V value;
 
-    private TreeNode<K, V> parent;
+    private volatile TreeNode<K, V> parent;
 
-    private Collection<TreeNode<K, V>> childs = new ArrayList<TreeNode<K, V>>();
+    private Collection<TreeNode<K, V>> children = new ArrayList<>();
 
-    public AbstractTreeNode(K id, K parentId) {
-        this.id = id;
-        this.parentId = parentId;
-    }
+    private AtomicBoolean processed = new AtomicBoolean(false);
+
+    private CountDownLatch latch = new CountDownLatch(1);
 
     public AbstractTreeNode(K id, V value, K parentId) {
         this(id, parentId);
         this.value = value;
     }
 
-    public Collection<TreeNode<K, V>> getChilds() {
-        return childs;
+    public synchronized Collection<TreeNode<K, V>> getChildren() {
+
+        return unmodifiableCollection(children);
     }
 
-    public void addChildNode(TreeNode<K, V> node) {
-        childs.add(node);
-    }
+    public synchronized void addChildNode(TreeNode<K, V> node) {
 
-    @Override
-    public K getParentId() {
-        return parentId;
-    }
-
-    @Override
-    public TreeNode<K, V> getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(TreeNode<K, V> parent) {
-        this.parent = parent;
-    }
-
-    @Override
-    public K getId() {
-        return id;
+        children.add(node);
     }
 
     @Override
@@ -63,5 +58,44 @@ public abstract class AbstractTreeNode<K, V> implements TreeNode<K, V> {
 
     public void set(V value) {
         this.value = value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractTreeNode<?, ?> that = (AbstractTreeNode<?, ?>) o;
+        return Objects.equals(id, that.id) &&
+                Objects.equals(parentId, that.parentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, parentId);
+    }
+
+    @Override
+    public boolean isVisited() {
+        return processed.get();
+    }
+
+    @Override
+    @SneakyThrows
+    public void awaitVisited(long timeout, TimeUnit unit) {
+        if (timeout == 0) {
+            latch.await();
+            return;
+        }
+        if (!latch.await(timeout, unit)) {
+            throw new TimeoutException("Node with id: " + id + "was't visited for" + timeout + " " + unit);
+        }
+    }
+
+    @Override
+    public void markVisited() {
+        if (!processed.compareAndSet(false, true)) {
+            throw new IllegalStateException("Node is already processed");
+        }
+        latch.countDown();
     }
 }

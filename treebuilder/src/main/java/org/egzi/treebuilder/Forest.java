@@ -1,18 +1,25 @@
 package org.egzi.treebuilder;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Stream;
 
 /**
  * Container for trees
+ *
  * @param <K> key type
  * @param <V> value type
  */
 public class Forest<K, V> {
-    private Map<K, TreeNode<K,V>> treeRegister = new HashMap<K, TreeNode<K, V>>();
 
-    private Map<K, Tree<K, V>> trees = new HashMap<K, Tree<K, V>>();
+    private Map<K, TreeNode<K, V>> treeRegister = new HashMap<>();
 
-    private Map<K, Set<TreeNode<K,V>>> pendingNodes = new HashMap<K, Set<TreeNode<K, V>>>();
+    // due to opportunity to add already visited node to on the fly.
+    private Map<K, Tree<K, V>> trees = new ConcurrentHashMap<>();
+
+    private Map<K, Set<TreeNode<K, V>>> pendingNodes = new HashMap<>();
+
+    private boolean builded = false;
 
     Forest() {
     }
@@ -23,6 +30,7 @@ public class Forest<K, V> {
      * If there's no node with <b>parentID</b> key in forest than current one will be add to pending list
      * Otherwise if node with ID equals parentId from treeNode than current node will be added to this tree and pending
      * nodes with parentId equal to getId of current node will be added too
+     *
      * @param treeNode new node
      */
     public void addTreeNode(TreeNode<K, V> treeNode) {
@@ -35,38 +43,39 @@ public class Forest<K, V> {
                 throw new TreeConstructException("Duplicate of node " + treeNode + ". Construction will be terminated");
             addTree(treeNode);
         } else {
-
-            TreeNode<K, V> parentNode = treeRegister.get(treeNode.getParentId());
-
-            if (parentNode == null) {
+            Optional<TreeNode<K, V>> parentNode;
+            if (!builded) {
+                parentNode = Optional.ofNullable(treeRegister.get(treeNode.getParentId()));
+            } else {
+                parentNode = nodeStream().filter(node -> node.getId().equals(treeNode.getParentId())).findFirst();
+            }
+            if (!parentNode.isPresent()) {
                 addPendingParent(treeNode);
             } else {
-                connectNodes(parentNode, treeNode);
+                connectNodes(parentNode.get(), treeNode);
             }
         }
 
-        treeRegister.put(treeNode.getId(), treeNode);
+        if (!builded) {
+            treeRegister.put(treeNode.getId(), treeNode);
+        }
 
         refreshPending(treeNode);
     }
 
     /**
      * Add node to pending nodes list
+     *
      * @param treeNode pending node
      */
     private void addPendingParent(TreeNode<K, V> treeNode) {
-        Set<TreeNode<K, V>> pendings = pendingNodes.get(treeNode.getParentId());
-
-        if (pendings == null) {
-            pendings = new HashSet<TreeNode<K, V>>();
-            pendingNodes.put(treeNode.getParentId(), pendings);
-        }
-
+        Set<TreeNode<K, V>> pendings = pendingNodes.computeIfAbsent(treeNode.getParentId(), k -> new HashSet<TreeNode<K, V>>());
         pendings.add(treeNode);
     }
 
     /**
      * Get all available trees
+     *
      * @return available trees
      */
     public Collection<Tree<K, V>> getTrees() {
@@ -75,14 +84,16 @@ public class Forest<K, V> {
 
     /**
      * Add tree to forest
+     *
      * @param rootNode new tree
      */
-    private void addTree(final TreeNode<K ,V> rootNode) {
-        trees.put(rootNode.getId(), new Tree<K, V>(rootNode));
+    private void addTree(final TreeNode<K, V> rootNode) {
+        trees.put(rootNode.getId(), new Tree<>(rootNode));
     }
 
     /**
      * Refresh nodes after adding newNode
+     *
      * @param newNode new Node
      */
     private void refreshPending(TreeNode<K, V> newNode) {
@@ -102,6 +113,7 @@ public class Forest<K, V> {
 
     /**
      * Link two nodes by Parent-Child relation
+     *
      * @param parent
      * @param child
      */
@@ -112,6 +124,7 @@ public class Forest<K, V> {
 
     /**
      * Get set of unadded nodes
+     *
      * @return set of nodes
      */
     public Set<K> getUnfoundNodeID() {
@@ -123,5 +136,19 @@ public class Forest<K, V> {
      */
     void clearRegister() {
         treeRegister.clear();
+    }
+
+    void markBuilded() {
+        builded = true;
+    }
+
+    /**
+     * Flat map stream of nodes
+     *
+     * @return node stream
+     */
+    public Stream<TreeNode<K, V>> nodeStream() {
+        return getTrees().stream()
+                .flatMap(Tree::treeNodeStream);
     }
 }

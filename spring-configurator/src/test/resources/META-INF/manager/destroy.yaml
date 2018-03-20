@@ -1,0 +1,20 @@
+contexts:
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.destroy.ParentDestroyConfig1
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.destroy.children.ChildDestroyConfig1
+    parent-config-class: org.egzi.springconfigurator.context.manager.destroy.ParentDestroyConfig1
+
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.destroy.ParentDestroyConfig2
+
+  - lazy-init: false
+    application-context-class: org.springframework.context.annotation.AnnotationConfigApplicationContext
+    config-class: org.egzi.springconfigurator.context.manager.destroy.children.ChildDestroyConfig2
+    parent-config-class: org.egzi.springconfigurator.context.manager.destroy.ParentDestroyConfig2
+

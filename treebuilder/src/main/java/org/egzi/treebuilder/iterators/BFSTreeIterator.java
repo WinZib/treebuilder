@@ -30,7 +30,7 @@ public class BFSTreeIterator<K, V> implements Iterator<TreeNode<K, V>> {
             throw new NoSuchElementException();
         //removes from front of queue
         TreeNode<K, V> next = queue.remove();
-        queue.addAll(next.getChilds());
+        queue.addAll(next.getChildren());
         return next;
     }
 }

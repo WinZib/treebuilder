@@ -27,7 +27,7 @@ public class DFSTreeIterator<K, V> implements Iterator<TreeNode<K, V>> {
             throw new NoSuchElementException();
         //removes from front of stack
         TreeNode<K, V> next = stack.pop();
-        stack.addAll(next.getChilds());
+        stack.addAll(next.getChildren());
         return next;
     }
 }

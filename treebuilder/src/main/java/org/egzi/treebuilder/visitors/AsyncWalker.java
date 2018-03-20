@@ -3,12 +3,14 @@ package org.egzi.treebuilder.visitors;
 import org.egzi.treebuilder.TreeNode;
 
 import java.util.concurrent.ForkJoinPool;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ForkJoinTask;
+import java.util.function.Predicate;
 
 public class AsyncWalker<K, V> extends AbstractWalker<K, V> {
-    private ForkJoinPool forkJoinPool;
 
-    private OnErrorListener onErrorListener;
+    private ForkJoinPool forkJoinPool = ForkJoinPool.commonPool();
+
+    private Predicate<TreeNode<K, V>> filterRule = ((Predicate<TreeNode<K, V>>) TreeNode::isVisited).negate();
 
     public AsyncWalker() {
     }
@@ -17,19 +19,24 @@ public class AsyncWalker<K, V> extends AbstractWalker<K, V> {
         this.forkJoinPool = forkJoinPool;
     }
 
-    public void setOnErrorListener(OnErrorListener onErrorListener) {
-        this.onErrorListener = onErrorListener;
+    public ForkJoinTask<Void> walk(final TreeNode<K, V> treeNode) {
+        if (treeNode.isVisited()) return null;
+        return forkJoinPool.submit(constructVisitTask(treeNode));
     }
 
-    public void walk(final TreeNode<K, V> treeNode) {
-        forkJoinPool.execute(constructVisitTask(treeNode));
-    }
-
-    public void await(long time, TimeUnit timeUnit) {
-        forkJoinPool.awaitQuiescence(time, timeUnit);
-    }
 
     private TreeNodeTask<K, V> constructVisitTask(TreeNode<K, V> treeNode) {
-        return new TreeNodeTask<>(treeNode, getVisitor());
+        return new TreeNodeTask<>(treeNode, getVisitor(), filterRule);
     }
+
+    public AsyncWalker applyFilterRuleForChildrenNodes(Predicate<? super TreeNode<K, V>> filterRule) {
+        this.filterRule.and(filterRule);
+        return this;
+    }
+
+
 }
+
+
+
+

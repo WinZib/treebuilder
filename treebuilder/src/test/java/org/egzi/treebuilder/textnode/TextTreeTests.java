@@ -30,8 +30,8 @@ public class TextTreeTests {
                 return null;
             }
         });
-        for (Tree<Integer, String> tree : forest.getTrees())
-            walker.walk(tree.getRoot());
+
+        forest.getTrees().stream().map(tree -> walker.walk(tree.getRoot())).forEach(task -> task.join());
 
         TestCase.assertEquals(expectedString, result.toString());
     }

@@ -10,6 +10,7 @@ import org.egzi.treebuilder.visitors.Visitor;
 import org.junit.Test;
 
 import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
 
 /**
  * Created by Егор on 03.01.2017.
@@ -31,7 +32,7 @@ public class TextTreeTests {
             }
         });
 
-        forest.getTrees().stream().map(tree -> walker.walk(tree.getRoot())).forEach(task -> task.join());
+        forest.getTrees().stream().map(tree -> walker.walk(tree.getRoot())).forEach(ForkJoinTask::join);
 
         TestCase.assertEquals(expectedString, result.toString());
     }
@@ -49,6 +50,6 @@ public class TextTreeTests {
 
     @Test
     public void multiThreadTest() {
-        startTest("1 A\r\n2 1 B\r\n3 1 C\r\n4 3 D\r\n", new ForkJoinPool(2), "ABCD");
+        startTest("1 A\r\n2 1 B\r\n3 2 C\r\n4 3 D\r\n", new ForkJoinPool(2), "ABCD");
     }
 }

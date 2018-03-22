@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.egzi.treebuilder</groupId>
 	<artifactId>treebuilder-main</artifactId>
@@ -11,27 +11,87 @@
 	<properties>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
+        <javadoc.version>2.9.1</javadoc.version>
 	</properties>
 
-	<modules>
-		<module>treebuilder</module>
-		<module>spring-configurator</module>
-	</modules>
+    <modules>
+        <module>treebuilder</module>
+        <module>spring-configurator</module>
+    </modules>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.21.0</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.apache.maven.surefire</groupId>
-						<artifactId>surefire-junit47</artifactId>
-						<version>2.21.0</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-	</build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${javadoc.version}</version>
+                <configuration>
+                    <doclet>org.asciidoctor.Asciidoclet</doclet>
+                    <docletArtifact>
+                        <groupId>org.asciidoctor</groupId>
+                        <artifactId>asciidoclet</artifactId>
+                        <version>${asciidoclet.version}</version>
+                    </docletArtifact>
+                    <additionalparam>--base-dir ${project.basedir}</additionalparam>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.21.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.21.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
+    <profiles>
+        <profile>
+            <id>license-generation</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>license-maven-plugin</artifactId>
+                        <version>1.10</version>
+
+                        <configuration>
+                            <verbose>false</verbose>
+                            <includes>
+                                <includes>**/*.java</includes>
+                            </includes>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>generate-license-headers</id>
+                                <goals>
+                                    <goal>update-file-header</goal>
+                                </goals>
+                                <phase>process-sources</phase>
+                                <configuration>
+                                    <licenseName>apache_v2</licenseName>
+                                    <organizationName>WinZib (winzib@yandex.ru)</organizationName>
+                                    <inceptionYear>2018</inceptionYear>
+                                    <canUpdateCopyright>true</canUpdateCopyright>
+                                    <canUpdateLicense>true</canUpdateLicense>
+                                    <processStartTag> </processStartTag>
+                                    <sectionDelimiter> </sectionDelimiter>
+                                    <processEndTag> </processEndTag>
+                                    <roots>
+                                        <root>src/main/java</root>
+                                        <root>src/test/java</root>
+                                    </roots>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
